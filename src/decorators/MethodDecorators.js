@@ -1,5 +1,14 @@
 import {angularInjector} from "../util/AngularModuleResolver"
 
+// This file contains the following decorators
+// @Init
+// @Destroy
+// @Watch
+// @WatchCollection
+// @On
+// @Debounce
+// @Abstract
+
 /**
  * Executes all Methods annotated with this annotation after
  * the object has been created

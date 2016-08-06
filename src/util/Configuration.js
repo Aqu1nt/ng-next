@@ -12,7 +12,10 @@ const Angular2to1Config =  {
     ASYNC_AWAIT_ENABLED : true,
 
     //Further configuration
-    ALLOW_DECORATORS_IN_SERVICES : true
+    ALLOW_DECORATORS_IN_SERVICES : true,
+
+    //Decorators
+    STATE_DECORATOR : state => state
 };
 
 export {Angular2to1Config as config};

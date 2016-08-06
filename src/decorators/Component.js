@@ -1,5 +1,5 @@
 import {lookupAngularModule} from "../util/AngularModuleResolver"
-import {decorateView} from "../util/AngularUtils"
+import {decorateView} from "./View"
 const App = lookupAngularModule();
 
 /**

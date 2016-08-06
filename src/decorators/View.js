@@ -12,3 +12,20 @@ export function View(view)
         return target;
     }
 }
+
+/**
+ * Decorates the view to the configuration
+ * @param clazz
+ * @param conf
+ */
+export function decorateView(clazz, conf)
+{
+    let view = clazz.$$view;
+    if (!view) return;
+    let urlRegex = /[^<>]+\.[A-Za-z]{2,5}$/;
+    if (urlRegex.test(view)) { //url
+        conf.templateUrl = view;
+    } else {
+        conf.template = view;
+    }
+}

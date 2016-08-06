@@ -1,6 +1,7 @@
 import {Controller} from "./Controller"
 import {lookupAngularModule} from "../util/AngularModuleResolver"
-import {decorateView} from "../util/AngularUtils"
+import {decorateView} from "./View"
+import {config} from "../util/Configuration"
 const App = lookupAngularModule();
 
 /**
@@ -88,15 +89,17 @@ App.config(["$urlRouterProvider", "$injector", function($urlRouterProvider, $inj
         conf.controllerAs = conf.as || conf.controllerAs || clazz.$$alias;
 
         /**
-         * Set view
+         * Decorate the view if possible
          */
         decorateView(clazz, conf);
 
-        /*
-         * Set the state
-         */
-        console.log(conf);
+        //Apply decorators
+        let decoratedConf = config.STATE_DECORATOR(conf);
+        if (decoratedConf) conf = decoratedConf;
 
+        /**
+         * Finally configure the state onto the ui-router
+         */
         $stateProvider.state(conf);
     }
 }]);
