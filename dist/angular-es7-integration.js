@@ -30,7 +30,7 @@ var _Self = require("./decorators/Self");
 
 var _State = require("./decorators/State");
 
-var _Inject = require("./decorators/Inject");
+var _Inject = ("./decorators/Inject");
 
 var _MethodDecorators = require("./decorators/MethodDecorators");
 
