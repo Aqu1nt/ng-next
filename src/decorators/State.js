@@ -37,7 +37,7 @@ export function State(conf)
  * the all controllers
  * @param clazz
  */
-App.config(function($urlRouterProvider, $injector){
+App.config(["$urlRouterProvider", "$injector", function($urlRouterProvider, $injector){
     "ngInject";
 
     let registeredControllers = [];
@@ -95,6 +95,8 @@ App.config(function($urlRouterProvider, $injector){
         /*
          * Set the state
          */
+        console.log(conf);
+
         $stateProvider.state(conf);
     }
-});
+}]);

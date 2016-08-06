@@ -1,13 +1,12 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+import {lookupAngularModule, angularInjector} from "../util/AngularModuleResolver"
 import {config} from "../util/Configuration"
 
 // Attempt to fetch the main angular module
 let App = lookupAngularModule();
 
 
-//We need the Injector in some decorators
+// The main injector
 let $injector = null;
-App.run(["$injector", (i) => $injector = i]);
 
 /**
  * Hook angular $digest callback into Promises in order to work
@@ -30,6 +29,10 @@ let digest = function ()
 
 let requestDigestCycle = function()
 {
+    if (!$injector) {
+        $injector = angularInjector();
+    }
+
     if (!$rootScope && $injector) {
         $rootScope = $injector.get("$rootScope");
     }

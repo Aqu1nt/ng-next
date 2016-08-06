@@ -6,7 +6,6 @@
  * on both the constructor and the controller!
  *
  * @param directive
- * @returns {fn}
  */
 export default function(directive)
 {
@@ -62,7 +61,7 @@ export default function(directive)
         return instance;
     };
 
-    //Kepp ngAnnotate injects
+    //Keep ngAnnotate injects
     fn.$inject = directive.$inject;
 
     return fn;

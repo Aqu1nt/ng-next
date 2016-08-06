@@ -96,8 +96,8 @@ export function Inject(target, name, descriptor)
 
 
 let currentLocals = undefined;
-App.config(function($provide){
-    $provide.decorator("$controller", function($delegate){
+App.config(["$provide", function($provide){
+    $provide.decorator("$controller", ["$delegate", function($delegate){
         return function(expression, locals, later, ident){
 
             //For usage in constructor
@@ -128,5 +128,5 @@ App.config(function($provide){
                 }
             }
         };
-    })
-});
+    }])
+}]);
