@@ -1,8 +1,8 @@
 {
-  "name": "angular-es7-integration",
-  "version": "0.0.2",
+  "name": "ng-next",
+  "version": "0.0.1",
   "description": "An easy way to use angular ^1.4 together with ES7 and beyond",
-  "main": "dist/angular-es7-integration.js",
+  "main": "dist/angular-es7-integration.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
