@@ -1,6 +1,6 @@
 {
   "name": "ng-next",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An easy way to use angular ^1.4 together with ES7 and beyond",
   "main": "dist/ng-next.min.js",
   "scripts": {
