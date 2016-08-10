@@ -1,3 +1,5 @@
+import {config} from "./Configuration"
+
 /**
  * Reference to the angular module used by Angular2to1, this module is either
  * resolved via ng-app or by useAngularModule(...)
@@ -19,6 +21,11 @@ let $injector = null;
  */
 export function lookupAngularModule()
 {
+    //Get module from config
+    if (config.MODULE && !angularModule) {
+        angularModule = config.MODULE;
+    }
+
     //Returns the preset module if available
     if (angularModule) {
         return angularModule;

@@ -5,6 +5,8 @@
  * The module configuration, as an anonymous object
  */
 const NgNextConfig =  {
+    //Angular module
+    MODULE : undefined,
 
     //PromiseHook configuration
     DEBOUNCE_DIGEST_MILLIS : false,
