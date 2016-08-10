@@ -18,6 +18,10 @@ Make sure you define your angular module **before**
 Ng-next **relies on `ng-app`** to fetch your angular module.  
 As an alternative you can define it on the `config` object.
 
+### Babel & Decorators
+If you want to use decorators please install 
+[Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
+
 ## Usage
 
 ### Async / Await
