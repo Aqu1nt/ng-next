@@ -22,8 +22,8 @@ The proxies get injected into `Promise` the first time you call `import "ng-next
 If you have a huge amount of `async / await` or `Promise.then` statements in your code and they get called extremely often this can
 cause slight performance issues depending on the scope of your application.
 
-For this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before $rootScope gets $digested again.
+In this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before $rootScope gets $digested again.
  
-`import {config} from "ng-next"
+```import {config} from "ng-next"
  config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
- config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce`
+ config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce```
