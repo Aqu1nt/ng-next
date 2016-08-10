@@ -1,4 +1,5 @@
 import {angularInjector, lookupAngularModule} from "../util/AngularModuleResolver"
+import * as symbols from "../util/Symbols"
 import {callAnnotations} from "../util/AngularUtils"
 const App = lookupAngularModule();
 
@@ -50,7 +51,7 @@ export function Inject(target, name, descriptor)
                 let obj = null;
                 let injected = false;
 
-                let locals = this.$$locals || currentLocals;
+                let locals = this[symbols.locals] || currentLocals;
 
                 //Locale
                 if (locals && (locals.hasOwnProperty(name) || locals[name])){
@@ -111,8 +112,8 @@ App.config(["$provide", function($provide){
 
             //Check if its an object
             if (!later){
-                controller.$$locals = locals;
-                controller.$$scope = locals.$scope;
+                controller[symbols.locals] = locals;
+                controller[symbols.scope] = locals.$scope;
                 callAnnotations(controller, locals.$scope);
                 return controller;
             }
@@ -121,8 +122,8 @@ App.config(["$provide", function($provide){
                     currentLocals = locals;
                     let c = controller();
                     currentLocals = undefined;
-                    c.$$locals = locals;
-                    c.$$scope = locals.$scope;
+                    c[symbols.locals] = locals;
+                    c[symbols.scope] = locals.$scope;
                     callAnnotations(c, locals.$scope);
                     return c;
                 }

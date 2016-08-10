@@ -1,3 +1,5 @@
+import * as symbols from "../util/Symbols"
+
 /**
  * Sets the view of an @Component or a @State can either be
  * a template or a templateUrl, the view is recognized as template
@@ -8,7 +10,7 @@
 export function View(view)
 {
     return (target) => {
-        target.$$view = view;
+        target[symbols.view] = view;
         return target;
     }
 }
@@ -20,10 +22,11 @@ export function View(view)
  */
 export function decorateView(clazz, conf)
 {
-    let view = clazz.$$view;
+    let view = clazz[symbols.view];
     if (!view) return;
     let urlRegex = /[^<>]+\.[A-Za-z]{2,5}$/;
-    if (urlRegex.test(view)) { //url
+    if (urlRegex.test(
+        view)) { //url
         conf.templateUrl = view;
     } else {
         conf.template = view;

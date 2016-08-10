@@ -1,5 +1,6 @@
 import {angularInjector, lookupAngularModule} from "./AngularModuleResolver"
 import {config} from "./Configuration"
+import * as symbols from "../util/Symbols"
 const App = lookupAngularModule();
 
 /**
@@ -60,7 +61,7 @@ export function callAnnotations(controller, $scope)
 
     //Call init methods
     let inited = [];
-    for (let initializer of controller.$$init || [])
+    for (let initializer of controller[symbols.init] || [])
     {
         if (!inited.includes(initializer)) {
             asyncWrapper(controller[initializer]());
@@ -71,7 +72,7 @@ export function callAnnotations(controller, $scope)
     //Bind watches
     let watched = [];
     let $parse = angularInjector().get("$parse");
-    for (let watcher of controller.$$watch || []) {
+    for (let watcher of controller[symbols.watch] || []) {
         if (!watched.includes(watcher)) {
 
             //Parse the angular expression
@@ -91,7 +92,7 @@ export function callAnnotations(controller, $scope)
 
     //Bind events
     let evented = [];
-    for (let on of controller.$$on || []) {
+    for (let on of controller[symbols.on] || []) {
         if (! evented.includes(on)) {
             $scope.$on(on.event, function(...params){
                 asyncWrapper(controller[on.name](...params));
@@ -103,7 +104,7 @@ export function callAnnotations(controller, $scope)
     //Scheduled methods
     let $interval = angularInjector().get("$interval");
     let scheduled = [];
-    for (let schedule of controller.$$schedule || []) {
+    for (let schedule of controller[symbols.schedule] || []) {
         if (!scheduled.includes(schedule)){
             let id = $interval(function(){
                 asyncWrapper(controller[schedule.name]());
@@ -115,7 +116,7 @@ export function callAnnotations(controller, $scope)
     //Call destroy methods
     $scope.$on("$destroy", function(){
         let destroyed = [];
-        for (let destroyer of controller.$$destroy || [])
+        for (let destroyer of controller[symbols.destroy] || [])
         {
             if (!destroyed.includes(destroyer)) controller[destroyer]();
             destroyed.push(destroyer);

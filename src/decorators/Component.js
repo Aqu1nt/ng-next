@@ -1,5 +1,6 @@
 import {lookupAngularModule} from "../util/AngularModuleResolver"
 import {decorateView} from "./View"
+import * as symbols from "../util/Symbols"
 const App = lookupAngularModule();
 
 /**
@@ -45,10 +46,10 @@ export function Component(conf = {})
 
             //Merge @Bind properties
             if (conf.bind !== false) {
-                conf.bind = Object.assign(conf.bind || {}, target.$$bind || {});
+                conf.bind = Object.assign(conf.bind || {}, target[symbols.bind] || {});
             }
 
-            conf.controllerAs = target.$$alias || conf.controllerAs || "$ctrl";
+            conf.controllerAs = target[symbols.alias] || conf.controllerAs || "$ctrl";
             conf.bindToController = conf.bind;
 
             decorateView(target, conf);
@@ -74,8 +75,8 @@ export function Bind(bindType, attributeName)
 
         //Add the bind property to the type
         let type = target.constructor;
-        type.$$bind = type.$$bind || {};
-        type.$$bind[name] = bindType+attributeName;
+        type[symbols.bind] = type[symbols.bind] || {};
+        type[symbols.bind][name] = bindType+attributeName;
 
         return {
             writable : true,

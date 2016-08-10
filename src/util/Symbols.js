@@ -1,0 +1,11 @@
+export const state = Symbol("@State");
+export const view = Symbol("@View");
+export const alias = Symbol("@Alias");
+export const init = Symbol("@Init");
+export const destroy = Symbol("@Destroy");
+export const watch = Symbol("@Watch");
+export const on = Symbol("@On");
+export const schedule = Symbol("@Schedule");
+export const bind = Symbol("@Bind");
+export const scope = Symbol("Scope");
+export const locals = Symbol("Locals");

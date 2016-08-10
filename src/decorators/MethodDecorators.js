@@ -1,4 +1,5 @@
 import {angularInjector} from "../util/AngularModuleResolver"
+import * as symbols from "../util/Symbols"
 
 // This file contains the following decorators
 // @Init
@@ -21,8 +22,8 @@ export function Init(target, name, descriptor){
     if (!descriptor) {
         throw new Error("@Init can only be used on class methods");
     }
-    target.$$init = target.$$init || new Set();
-    target.$$init.add(name);
+    target[symbols.init] = target[symbols.init] || [];
+    target[symbols.init].push(name);
 }
 
 /**
@@ -37,8 +38,8 @@ export function Init(target, name, descriptor){
  * @decorator
  */
 export function Destroy(target, name){
-    target.$$destroy = target.$$destroy || new Set();
-    target.$$destroy.add(name);
+    target[symbols.destroy] = target[symbols.destroy] || [];
+    target[symbols.destroy].push(name);
 }
 
 /**
@@ -62,8 +63,8 @@ export function Destroy(target, name){
 export function Watch(property, deep = false){
 
     return (target, name) => {
-        target.$$watch = target.$$watch || new Set();
-        target.$$watch.add({property, name, deep, collection : false});
+        target[symbols.watch] = target[symbols.watch] || [];
+        target[symbols.watch].push({property, name, deep, collection : false});
     };
 }
 
@@ -76,8 +77,8 @@ export function Watch(property, deep = false){
 export function WatchCollection(property){
 
     return (target, name) => {
-        target.$$watch = target.$$watch || new Set();
-        target.$$watch.add({property, name, false, collection : true});
+        target[symbols.watch] = target[symbols.watch] || [];
+        target[symbols.watch].push({property, name, false, collection : true});
     };
 }
 
@@ -89,8 +90,8 @@ export function WatchCollection(property){
 export function Schedule(interval)
 {
     return (target, name, desc) => {
-        target.$$schedule = target.$$schedule || new Set();
-        target.$$schedule.add({interval, name})
+        target[symbols.schedule] = target[symbols.schedule] || [];
+        target[symbols.schedule].push({interval, name})
     }
 }
 
@@ -109,8 +110,8 @@ export function Schedule(interval)
 export function On(event)
 {
     return (target, name, desc) => {
-        target.$$on = target.$$on || new Set();
-        target.$$on.add({event, name})
+        target[symbols.on] = target[symbols.on] || [];
+        target[symbols.on].push({event, name})
     }
 }
 
