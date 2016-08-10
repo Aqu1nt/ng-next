@@ -42,7 +42,7 @@ let requestDigestCycle = function()
         let now = new Date().getTime();
 
         //Digest is available
-        if (now >= nextAvailableDigest || !config.DEBOUNCE_DIGEST) {
+        if (now >= nextAvailableDigest || !config.DEBOUNCE_DIGEST_MILLIS) {
             nextAvailableDigest = now + config.DEBOUNCE_DIGEST_MILLIS;
             digest();
         }

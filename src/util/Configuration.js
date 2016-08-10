@@ -4,11 +4,10 @@
 /**
  * The module configuration, as an anonymous object
  */
-const Angular2to1Config =  {
+const NgNextConfig =  {
 
     //PromiseHook configuration
-    DEBOUNCE_DIGEST : false,
-    DEBOUNCE_DIGEST_MILLIS : 25,
+    DEBOUNCE_DIGEST_MILLIS : false,
     ASYNC_AWAIT_ENABLED : true,
 
     //Further configuration
@@ -18,4 +17,4 @@ const Angular2to1Config =  {
     STATE_DECORATOR : state => state
 };
 
-export {Angular2to1Config as config};
+export {NgNextConfig as config};
