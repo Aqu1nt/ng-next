@@ -1,10 +1,7 @@
 # ng-next
-Ng-next provides a simple way to mix angular 1.x with ES6 / ES7, its key parts are 
+Ng-next provides a simple way to use angular 1.x with ES6 / ES7  
 * **Decorators for angular & ui-router**
 * **Async / Await integration to make it compatible with angulars $digest cycle**
-
-
-This little library is pretty new and under active development. Please report bugs and improvements :)
 
 ## Installation
 ### NPM
@@ -36,3 +33,6 @@ import {config} from "ng-next"
 config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
 config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce
 ```
+
+# Info
+This little library is pretty new and under active development. Please report bugs and improvements :)
