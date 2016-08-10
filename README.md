@@ -34,5 +34,332 @@ config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
 config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce
 ```
 
+### Decorators
+Angular configuration decorators
+* `@Controller`
+* `@Service`
+* `@Component`
+* `@Directive`
+* `@Filter`
+* `@Config / @Run`
+
+Utility decorators
+* `@Inject`
+* `@Init`
+* `@Destroy`
+* `@On`
+* `@Watch`
+* `@WatchCollection`
+* `@Debounce`
+
+Other decorators
+* `@State`
+* `@Alias`
+* `@View`
+* `@Bind`
+
+### Angular configuration decorators
+
+#### `@Controller`
+```javascript
+import {Controller} from "ng-next"
+
+@Controller 
+export class FooController 
+{
+	@Inject $http;
+}
+
+@Controller("BarController") //Minify safe
+export class BarController 
+{
+	@Inject $rootScope;
+}
+```
+
+#### `@Service`
+```javascript
+import {Service} from "ng-next"
+
+@Service 
+export class FooService { }
+
+@Service("BarService") //Minify safe
+export class BarService { }
+```
+
+#### `@Component`
+`@Component` is placed directly on top of its controller!
+
+```javascript
+import {Component, View, Alias, Bind} from "ng-next"
+
+/**
+ * Component with decorators
+ */
+@Component("bar") //<bar></bar> Same as @Component({ name : "bar" })
+@Alias("barCtrl")
+@View("<h1>{{ barCtrl.foo }}</h1>")
+export class BarComponent 
+{
+	@Bind("=") foo;
+	
+	constructor() {
+		console.log(this.foo);
+	}
+}
+
+/**
+ * More old-scool component.
+ * The object given into the decorator is used as directive configuration
+ * You may give set property a directive can have
+ */
+@Component({
+	name : "foo",
+	template : "<h1>{{ fooCtrl.bar }}</h1>"
+	bind : {
+		bar : "="
+	},
+	as : "fooCtrl"
+}) //<foo> </foo>
+export class FooComponent 
+{
+	constructor() {
+			console.log(this.bar);
+		}
+}
+```
+
+#### `@Directive`
+```javascript
+import {Directive} from "ng-next"
+
+@Directive("foo") //<div foo> </div>
+export class FooDirective 
+{ 
+
+	restrict = "AE"
+	scope = {
+		bar : "="
+	}
+	link(...){}
+	
+}
+```
+
+#### `@Filter`
+```javascript
+import {Filter} from "ng-next"
+
+export class Filters 
+{ 
+
+	/**
+	 * @ngInject
+	 */
+	@Filter //uses method name as filter name
+	uppder(){
+		return (string) => string.toUpperCase()
+	}
+	
+	/**
+	 * @ngInject
+	 */
+	@Filter("lower")
+	lower($rootScope){
+		return (string) => string.toLowerCase()
+	}
+}
+}
+```
+
+#### `@Config / @Run`
+```javascript
+import {Config, Run} from "ng-next"
+
+export class Filters 
+{ 
+
+	/**
+	 * @ngInject
+	 */
+	@Run
+	runSomething($rootScope){
+		return (string) => string.toUpperCase()
+	}
+	
+	/**
+	 * @ngInject
+	 */
+	@Config
+	configureSomething($httpProvider){
+		//Config method
+	}
+}
+```  
+
+### Utility decorators
+Those decorators should only be used on controllers and services,  
+on services ng-next will use the $rootScope as scope for @On, @Watch and so on...
+
+```javascript 
+import {Inject, Controller, Init, Destroy, On, Watch, WatchCollection, Debounce}
+
+@Controller
+export class MainController
+{
+	/**
+	 * Directly inject the angular http service
+	 */
+	@Inject $http;
+	
+	/**
+	 * Directly inject the controller $scope
+	 */
+	@Inject $scope;
+
+	/**
+	 * Inject the $rootScope under an alias
+	 */
+	@Inject("$rootScope") baseScope;
+
+	/**
+	 * A random property
+	 */
+	property = "Hello World";
+	
+	/**
+	 * A random array
+	 */
+	array = ["1", "hello", "red"];
+	
+	@Init //You cannot use await in constructors, so @Init is perfect for that
+	async init()
+	{
+		let response = await this.$http.get("....");
+	 //Do init stuff
+	}
+	
+	@Destroy
+	cleanUp()
+	{
+		//Cleanup when the controller / its scope gets destroyed
+	}
+	
+	/**
+	 * With @On you can listen to any event you can with $scope.$on
+	 */
+	@On("$stateChangeSuccess")
+	stateChanged(event)
+	{
+		console.log("state changed", event)
+	}
+	
+	/**
+	 * With @Watch you can listen to any property as you would with $scope.$watch, but  
+	 * its evaluateed on the controller instead of the scope
+	 */
+	@Watch("property")
+	stateChanged(newValue, oldValue)
+	{
+		console.log(`Property changed from ${oldValue} to ${newValue}`)
+	}
+	
+	/**
+	 * With @WatchCollection you can listen to any property as you would with $scope.$watchCollection, but  
+	 * its evaluateed on the controller instead of the scope
+	 */
+	@Watch("array")
+	stateChanged(newValue, oldValue)
+	{
+		console.log(`Array changed from ${oldValue} to ${newValue}`)
+	}
+	
+	/**
+	 * @Debounce will debounce the method for the given amount of millis
+	 */
+	@Debounce(100)
+	oftenCalledMethod()
+	{
+		//I get executed after i wasn't called for 100 milliseconds
+	}
+}
+```
+
+### Other decorators
+
+#### `@State`
+The `@State` decorator defines a state for the common **`ui-router`** plugin and sets the class  
+its on top of as controller.  
+You can combine it with `@View / @Alias` or configure the state as you're used to.
+
+```javascript
+import {State, Alias, View}
+
+@State({
+	name : "user",
+	url : "/user",
+})
+@View("/views/user.html")
+@Alias("userCtrl")
+export class UserController
+{
+	//State controller
+}
+
+```
+
+#### `@Alias`
+Sets the controllerAs property of an `@Component` or `@State`
+
+```javascript
+import {Alias, State, Component}
+
+@State(...)
+@Alias("userCtrl")
+export class UserController{ ... }
+
+@Component("user")
+@Alias("userCtrl")
+export class UserComponent{ ... }
+
+```
+
+#### `@View`
+Sets the template / templateUrl property of an `@Component` or `@State`, if the string contains a "<" its  
+used as template, otherwise its propbably an URL
+
+```javascript
+import {View, State, Component}
+
+@State(...)
+@View("/views/user.html")
+export class UserController{ ... }
+
+@Component("user")
+@View("<h1>Hello</h1>")
+export class UserComponent{ ... }
+
+```
+
+#### `@Bind`
+Defines a property / attribute which should be bound into a `@Component`
+
+```javascript
+import {Bind, Component, View}
+
+@Component("user")
+@View("<h1>{{ $ctrl.name }}</h1>")
+export class UserComponent
+{ 
+	/**
+	 * If the html is <user name="Dude"></user> then
+	 * this property is "Dude"
+	 */
+	@Bind("@") name;	
+}
+
+```
+
 # Info
 This little library is pretty new and under active development. Please report bugs and improvements :)
