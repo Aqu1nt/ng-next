@@ -6,12 +6,17 @@ Ng-next provides a simple way to use angular 1.x with ES6 / ES7
 ## Installation
 ### NPM
 Ng-next is available on npm  
-`npm install --save ng-next`
+```
+npm install --save ng-next
+```
 
 ### Angular module
-Make sure you define your angular module **before** `import "ng-next"`  
+Make sure you define your angular module **before**
+ ```javascript
+ import "ng-next"
+ ```
 Ng-next **relies on `ng-app`** to fetch your angular module.  
-As an alternative you can define it onto the `config` object.
+As an alternative you can define it on the `config` object.
 
 ## Usage
 
