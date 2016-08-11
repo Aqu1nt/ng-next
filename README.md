@@ -167,7 +167,7 @@ export class Filters
 	 * @ngInject
 	 */
 	@Filter //uses method name as filter name
-	uppder(){
+	upper($http){
 		return (string) => string.toUpperCase()
 	}
 	
