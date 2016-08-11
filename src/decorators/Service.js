@@ -1,6 +1,5 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+import {lookupAngularModule as module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
-const App = lookupAngularModule();
 
 /**
  * Defines a class as Service, if no name is provided aka the decorator is
@@ -15,7 +14,7 @@ export function Service(clazz) {
     clazz = fetch(clazz);
 
     //Function to add the controller
-    let addService = (name, clazz) => App.service(name, clazz);
+    let addService = (name, clazz) => module().service(name, clazz);
 
     if (clazz instanceof Function) {
         addService(clazz.name, clazz);

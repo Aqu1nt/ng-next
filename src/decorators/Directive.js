@@ -1,7 +1,6 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+module
 import {fetch} from "../util/AngularUtils"
 import es6enabler from "../util/ES6Directive"
-const App = lookupAngularModule();
 
 /**
  * Defines a class or a class method as Directive, if no name is provided aka the decorator is
@@ -18,7 +17,7 @@ const App = lookupAngularModule();
 export function Directive(clazz, name) {
     clazz = fetch(clazz);
 
-    let registerDirective = (name, fn) => App.directive(name, es6enabler(fn));
+    let registerDirective = (name, fn) => module().directive(name, es6enabler(fn));
 
     if (clazz.constructor != String) //Directive is called without name => @Directive
     {

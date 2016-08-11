@@ -1,6 +1,5 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+import {lookupAngularModule as module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
-const App = lookupAngularModule();
 
 /**
  * Defines a method as run block
@@ -9,6 +8,6 @@ const App = lookupAngularModule();
  */
 export function Run(target, name) {
     target = fetch(target);
-    if (target instanceof Function) App.run(target);
-    else App.run(target[name]);
+    if (target instanceof Function) module().run(target);
+    else module().run(target[name]);
 }

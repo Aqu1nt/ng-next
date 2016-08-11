@@ -1,8 +1,7 @@
-import {lookupAngularModule, angularInjector} from "../util/AngularModuleResolver"
+import {angularInjector} from "../util/AngularModuleResolver"
 import {config} from "../util/Configuration"
 
 // Attempt to fetch the main angular module
-let App = lookupAngularModule();
 
 
 // The main injector

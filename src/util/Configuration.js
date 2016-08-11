@@ -8,6 +8,9 @@ const NgNextConfig =  {
     //Angular module
     MODULE : undefined,
 
+    //Angular module
+    MODULE : null,
+
     //PromiseHook configuration
     DEBOUNCE_DIGEST_MILLIS : false,
     ASYNC_AWAIT_ENABLED : true,

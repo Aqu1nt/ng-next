@@ -1,6 +1,5 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+import {lookupAngularModule as module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
-const App = lookupAngularModule();
 
 /**
  * REgisters a method as an angular Filter
@@ -14,7 +13,7 @@ export function Filter(clazz, method) {
     clazz = fetch(clazz);
 
     //Function to add the controller
-    let registerFilter = (name, fn) => App.filter(name, fn);
+    let registerFilter = (name, fn) => module().filter(name, fn);
 
     if (clazz.constructor != String) { //With method name as filter name
         registerFilter(method, clazz[method]);

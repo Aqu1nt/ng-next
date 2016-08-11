@@ -1,7 +1,6 @@
-import {angularInjector, lookupAngularModule} from "./AngularModuleResolver"
+import {angularInjector, module} from "./AngularModuleResolver"
 import {config} from "./Configuration"
 import * as symbols from "../util/Symbols"
-const App = lookupAngularModule();
 
 /**
  * If the argument is an array (inject) this method
@@ -38,10 +37,14 @@ let exposeModule = module => {
         }
     });
 };
-App.run(() => {
-    if (config.ALLOW_DECORATORS_IN_SERVICES) {
-        exposeModule(App)
-    }
+
+//Await the angular module
+module.then(m => {
+    m.run(() => {
+        if (config.ALLOW_DECORATORS_IN_SERVICES) {
+            exposeModule(m)
+        }
+    });
 });
 
 /**
