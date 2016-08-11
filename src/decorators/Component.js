@@ -1,7 +1,6 @@
-import {lookupAngularModule} from "../util/AngularModuleResolver"
+import {lookupAngularModule as module} from "../util/AngularModuleResolver"
 import {decorateView} from "./View"
 import * as symbols from "../util/Symbols"
-const App = lookupAngularModule();
 
 /**
  * Defines the class as Component
@@ -42,7 +41,7 @@ export function Component(conf = {})
 
     return target => {
         conf.controller = target;
-        App.directive(conf.selector, () => {
+        module().directive(conf.selector, () => {
 
             //Merge @Bind properties
             if (conf.bind !== false) {

@@ -308,6 +308,7 @@ import {State, Alias, View}
 @State({
 	name : "user",
 	url : "/user",
+	default : true // Default state
 })
 @View("/views/user.html")
 @Alias("userCtrl")

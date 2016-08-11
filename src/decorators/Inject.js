@@ -1,7 +1,6 @@
-import {angularInjector, lookupAngularModule} from "../util/AngularModuleResolver"
+import {angularInjector, lookupAngularModule as module} from "../util/AngularModuleResolver"
 import * as symbols from "../util/Symbols"
 import {callAnnotations} from "../util/AngularUtils"
-const App = lookupAngularModule();
 
 /**
  * Inject one of the following into the object:
@@ -97,7 +96,7 @@ export function Inject(target, name, descriptor)
 
 
 let currentLocals = undefined;
-App.config(["$provide", function($provide){
+module().config(["$provide", function($provide){
     $provide.decorator("$controller", ["$delegate", function($delegate){
         return function(expression, locals, later, ident){
 
