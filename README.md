@@ -186,7 +186,7 @@ export class Filters
 ```javascript
 import {Config, Run} from "ng-next"
 
-export class Filters 
+export class Configuration 
 { 
 
 	/**
