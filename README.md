@@ -6,7 +6,7 @@ Ng-next provides a simple way to use angular 1.x with ES6 / ES7
 
 ## Installation
 ### NPM
-Ng-next is available on npm  
+Ng-next is available on [npm](https://www.npmjs.com/package/ng-next)  
 ```
 npm install --save ng-next
 ```
@@ -24,7 +24,7 @@ If you want to use decorators please install
 [Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
 
 ## Async / Await
-If you're totally hyped about `async / await`, you can use it now without having to call `$rootScope.$digest()` every
+If you're hyped about `async / await`, you can use it now without having to call `$rootScope.$digest()` every
 time you `await` something. It just works!
 
 This is achieved by injecting proxies into the default `Promise` class, which is used by `async / await`.
@@ -147,7 +147,7 @@ export class BarComponent
 /**
  * More old-scool component.
  * The object given into the decorator is used as directive configuration
- * You may give set property a directive can have
+ * You may use every property a directive can have
  */
 @Component({
 	name : "foo",
