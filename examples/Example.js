@@ -1,5 +1,2 @@
-import "angular"
-
-angular.module("example", []);
-
+import "./ExampleModule"
 import "./ExampleController"

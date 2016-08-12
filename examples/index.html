@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <title>Ng-next example</title>
 </head>
-<body>
+<body ng-controller="ExampleController as exampleCtrl">
 
+    <button ng-click="exampleCtrl.add()">Add</button>
+    <button ng-click="exampleCtrl.remove()">Remove</button>
+    <button ng-click="exampleCtrl.change()">Change</button>
+    <h1 ng-repeat="string in exampleCtrl.list">{{ string }}</h1>
     <script src="dist/transpiled.js"></script>
 </body>
 </html>

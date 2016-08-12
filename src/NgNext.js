@@ -1,3 +1,6 @@
+import "./integration/ES6PromiseHook"
+import "./integration/WatchIterableFix"
+
 //Export config
 import {config} from "./util/Configuration"
 export {config}
