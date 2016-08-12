@@ -1,4 +1,5 @@
 var elixir = require("laravel-elixir");
+require("laravel-elixir-livereload");
 
 elixir(function(mix){
 
@@ -14,5 +15,7 @@ elixir(function(mix){
 
     mix.browserify('./examples/Example.js', './examples/dist/transpiled.js', '.', {
 
-    })
+    });
+
+    mix.livereload();
 });

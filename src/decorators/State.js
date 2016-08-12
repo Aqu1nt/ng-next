@@ -39,14 +39,14 @@ export function State(conf)
  * @param clazz
  */
 module.then( m => {
-    m.config(["$urlRouterProvider", "$injector", function ($urlRouterProvider, $injector) {
+    m.config(["$injector", function ($injector) {
         "ngInject";
 
         let registeredControllers = [];
         let states = [];
 
         //Find every state controller
-        module()._invokeQueue.forEach(item => {
+        m._invokeQueue.forEach(item => {
             let constructor = item[2][1];
             if (registeredControllers.find((t) => t.type == constructor)) return;
             if (constructor[symbols.state]) {
@@ -67,6 +67,7 @@ module.then( m => {
 
         //Fetch the state provider
         let $stateProvider = $injector.get("$stateProvider");
+        let $urlRouterProvider = $injector.get("$urlRouterProvider");
 
         //Indicator if a default state has been set
         let defaultState = false;
