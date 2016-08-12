@@ -1,4 +1,4 @@
-module
+import {lookupAngularModule as module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
 import es6enabler from "../util/ES6Directive"
 

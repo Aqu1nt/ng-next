@@ -5,6 +5,8 @@
  * The module configuration, as an anonymous object
  */
 const NgNextConfig =  {
+    //Angular module
+    MODULE : undefined,
 
     //Angular module
     MODULE : null,
