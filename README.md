@@ -304,7 +304,7 @@ export class MainController
 	 * With @WatchCollection you can listen to any property as you would with $scope.$watchCollection, but  
 	 * its evaluateed on the controller instead of the scope
 	 */
-	@Watch("array")
+	@WatchCollection("array")
 	stateChanged(newValue, oldValue)
 	{
 		console.log(`Array changed from ${oldValue} to ${newValue}`)
