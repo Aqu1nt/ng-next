@@ -2,6 +2,7 @@
 Ng-next provides a simple way to use angular 1.x with ES6 / ES7  
 * **Decorators for angular & ui-router**
 * **Async / Await integration to make it compatible with angulars $digest cycle**
+* **Monkey patch for `$scope.$watchCollection` to work with ES6 iterables (Set / Map / Symbol.iterator)**
 
 ## Installation
 ### NPM
@@ -22,9 +23,7 @@ As an alternative you can define it on the `config` object.
 If you want to use decorators please install 
 [Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
 
-## Usage
-
-### Async / Await
+## Async / Await
 If you're totally hyped about `async / await`, you can use it now without having to call `$rootScope.$digest()` every
 time you `await` something. It just works!
 
@@ -43,7 +42,34 @@ config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
 config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce
 ```
 
-### Decorators
+## $scope.$watchCollection
+Ng-next monkey patches `$scope.$watchCollection` of every scope to make it compatible with any iterable object.  
+With this technique you can use `ng-repeat` and similiar directives with a `Set` or any object that has a `[Symbol.iterator]` method.
+```javascript
+import {Controller} from "ng-next"
+
+@Controller
+export class ListController
+{
+	list = new Set(["1", "2", "3", "4", "5"])
+	
+	[Symbol.iterator]()
+	{
+		return list[Symbol.iterator]();
+	}
+}
+
+//Html
+<div ng-controller="ListController as listCtrl">
+	<h1>Iterate over Set</h1>
+	<h2 ng-repeat="item in listCtrl.list">{{ item }}</h2>
+	
+	<h1>Iterate over controller</h1>
+	<h2 ng-repeat="item in listCtrl">{{ item }}</h2>
+</div>
+```
+
+## Decorators
 Angular configuration decorators
 * `@Controller`
 * `@Service`
