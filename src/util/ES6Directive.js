@@ -53,7 +53,7 @@ export default function(directive)
 
             instance.compile = function(...args)
             {
-                compile.apply(instance, args);
+                return compile.apply(instance, args);
             }
         }
 

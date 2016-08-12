@@ -7,10 +7,9 @@ import {module} from "../util/AngularModuleResolver"
  * This module monkey patches every $scope to proxy $watchCollection and transform a possible iterable
  * into a simple array.
  *
- * If you want to access the original methods, you will have to call $scope[Symbol.for("$new")] and $scope[Symbol.for("$watchCollection")]
+ * If you want to access the original methods, you will have to call $scope[Symbol.for("$watchCollection")]
  */
 module.then(module => {
-
     /**
      * Hook into the $rootScopeProvider to make sure we're the first ones to modify the $rootScope
      */
@@ -18,8 +17,10 @@ module.then(module => {
         const $get = $rootScopeProvider.$get;
         $rootScopeProvider.$get = ["$injector", "$parse", function($injector, $parse){
             let $rootScope = $injector.invoke($get);
-            monkeyPatch$scope$new($rootScope, $parse);
-            monkeyPatch$watchCollection($rootScope);
+
+            monkeyPatch$watchCollection($rootScope, $parse);
+            monkeyPatch$watchCollection($rootScope.__proto__.constructor.prototype, $parse);
+
             return $rootScope;
         }];
     }]);
@@ -31,37 +32,23 @@ module.then(module => {
  * @private
  */
 const $watchCollection = Symbol.for("$watchCollection");
-const $new = Symbol.for("$new");
 
-/**
- * Overrides $new to monkey patch every newly created Scope
- * @param $scope
- * @param $parse
- */
-function monkeyPatch$scope$new($scope, $parse)
-{
-    $scope[$new] = $scope.$new;
-    $scope.$new = function(){
-        let $s = $scope[$new]();
-        monkeyPatch$scope$new($s);
-        monkeyPatch$watchCollection($s, $parse);
-        return $s;
-    }
-}
 
 /**
  * Here we're actually patching the $watchCollection method
- * @param $scope
+ * @param $target
  * @param $parse
  */
-function monkeyPatch$watchCollection($scope, $parse)
+function monkeyPatch$watchCollection($target, $parse)
 {
-    $scope[$watchCollection] = $scope.$watchCollection;
-    $scope.$watchCollection = function(property, action){
+    $target[$watchCollection] = $target.$watchCollection;
+
+    $target.$watchCollection = function(property, action){
 
         let isFunc = typeof property == 'function';
         let getter = isFunc ? property : $parse(property);
         let iterableAsArray = undefined;
+        let $scope = this;
 
         let monkeyPatchedObserver = function(){
             let resolved = getter(isFunc ? undefined : $scope);
@@ -88,7 +75,7 @@ function monkeyPatch$watchCollection($scope, $parse)
             return resolved;
         };
 
-        return $scope[$watchCollection](monkeyPatchedObserver, action);
+        return this[$watchCollection](monkeyPatchedObserver, action); //Must be this way because of maximum call stack size exceeded error
     }
 }
 
