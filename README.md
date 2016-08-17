@@ -55,7 +55,7 @@ export class ListController
 	
 	[Symbol.iterator]()
 	{
-		return list[Symbol.iterator]();
+		return this.list[Symbol.iterator]();
 	}
 }
 
