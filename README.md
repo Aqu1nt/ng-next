@@ -1,17 +1,25 @@
 # ng-next
-Ng-next provides a simple way to use angular 1.x with ES6 / ES7  
+
+Ng-next is a simple way to use Angular 1.x with ES6 / ES7. It provides an expressive syntax to maintain the simplicity and readability of your code.
+
 * **Decorators for angular & ui-router**
-* **Async / Await integration to make it compatible with angulars $digest cycle**
+* **Async / Await integration to make it compatible with angular's $digest cycle**
 * **Monkey patch for `$scope.$watchCollection` to work with ES6 iterables (Set / Map / Symbol.iterator)**
 
+## Requirements
+
+* **Angular 1.x**
+* **Angular UI-Router**
+
 ## Installation
+
 ### NPM
 Ng-next is available on [npm](https://www.npmjs.com/package/ng-next)  
 ```
 npm install --save ng-next
 ```
 
-### Angular module
+### Angular Module
 Make sure you define your angular module **before**
  ```javascript
  import "ng-next"
@@ -20,7 +28,7 @@ Ng-next **relies on `ng-app`** to fetch your angular module.
 As an alternative you can define it on the `config` object.
 
 ### Babel & Decorators
-If you want to use decorators please install 
+If you want to use decorators please install
 [Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
 
 ## Async / Await
@@ -35,7 +43,7 @@ If you have a huge amount of `async / await` or `Promise.then` statements in you
 cause slight performance issues depending on the scope of your application.
 
 In this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before $rootScope gets $digested again.
- 
+
 ```javascript
 import {config} from "ng-next"
 config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
@@ -52,7 +60,7 @@ import {Controller} from "ng-next"
 export class ListController
 {
 	list = new Set(["1", "2", "3", "4", "5"])
-	
+
 	[Symbol.iterator]()
 	{
 		return list[Symbol.iterator]();
@@ -63,7 +71,7 @@ export class ListController
 <div ng-controller="ListController as listCtrl">
 	<h1>Iterate over Set</h1>
 	<h2 ng-repeat="item in listCtrl.list">{{ item }}</h2>
-	
+
 	<h1>Iterate over controller</h1>
 	<h2 ng-repeat="item in listCtrl">{{ item }}</h2>
 </div>
@@ -99,14 +107,14 @@ Other decorators
 ```javascript
 import {Controller} from "ng-next"
 
-@Controller 
-export class FooController 
+@Controller
+export class FooController
 {
 	@Inject $http;
 }
 
 @Controller("BarController") //Minify safe
-export class BarController 
+export class BarController
 {
 	@Inject $rootScope;
 }
@@ -116,7 +124,7 @@ export class BarController
 ```javascript
 import {Service} from "ng-next"
 
-@Service 
+@Service
 export class FooService { }
 
 @Service("BarService") //Minify safe
@@ -135,10 +143,10 @@ import {Component, View, Alias, Bind} from "ng-next"
 @Component("bar") //<bar></bar> Same as @Component({ name : "bar" })
 @Alias("barCtrl")
 @View("<h1>{{ barCtrl.foo }}</h1>")
-export class BarComponent 
+export class BarComponent
 {
 	@Bind("=") foo;
-	
+
 	constructor() {
 		console.log(this.foo);
 	}
@@ -157,7 +165,7 @@ export class BarComponent
 	},
 	as : "fooCtrl"
 }) //<foo> </foo>
-export class FooComponent 
+export class FooComponent
 {
 	constructor() {
 			console.log(this.bar);
@@ -170,15 +178,15 @@ export class FooComponent
 import {Directive} from "ng-next"
 
 @Directive("foo") //<div foo> </div>
-export class FooDirective 
-{ 
+export class FooDirective
+{
 
 	restrict = "AE"
 	scope = {
 		bar : "="
 	}
 	link(...){}
-	
+
 }
 ```
 
@@ -186,8 +194,8 @@ export class FooDirective
 ```javascript
 import {Filter} from "ng-next"
 
-export class Filters 
-{ 
+export class Filters
+{
 
 	/**
 	 * @ngInject
@@ -196,7 +204,7 @@ export class Filters
 	upper($http){
 		return (string) => string.toUpperCase()
 	}
-	
+
 	/**
 	 * @ngInject
 	 */
@@ -212,8 +220,8 @@ export class Filters
 ```javascript
 import {Config, Run} from "ng-next"
 
-export class Configuration 
-{ 
+export class Configuration
+{
 
 	/**
 	 * @ngInject
@@ -222,7 +230,7 @@ export class Configuration
 	runSomething($rootScope){
 		return (string) => string.toUpperCase()
 	}
-	
+
 	/**
 	 * @ngInject
 	 */
@@ -237,7 +245,7 @@ export class Configuration
 Those decorators should only be used on controllers and services,  
 on services ng-next will use the $rootScope as scope for @On, @Watch and so on...
 
-```javascript 
+```javascript
 import {Inject, Controller, Init, Destroy, On, Watch, WatchCollection, Debounce}
 
 @Controller
@@ -247,7 +255,7 @@ export class MainController
 	 * Directly inject the angular http service
 	 */
 	@Inject $http;
-	
+
 	/**
 	 * Directly inject the controller $scope
 	 */
@@ -262,25 +270,25 @@ export class MainController
 	 * A random property
 	 */
 	property = "Hello World";
-	
+
 	/**
 	 * A random array
 	 */
 	array = ["1", "hello", "red"];
-	
+
 	@Init //You cannot use await in constructors, so @Init is perfect for that
 	async init()
 	{
 		let response = await this.$http.get("....");
 	 //Do init stuff
 	}
-	
+
 	@Destroy
 	cleanUp()
 	{
 		//Cleanup when the controller / its scope gets destroyed
 	}
-	
+
 	/**
 	 * With @On you can listen to any event you can with $scope.$on
 	 */
@@ -289,7 +297,7 @@ export class MainController
 	{
 		console.log("state changed", event)
 	}
-	
+
 	/**
 	 * With @Watch you can listen to any property as you would with $scope.$watch, but  
 	 * its evaluateed on the controller instead of the scope
@@ -299,7 +307,7 @@ export class MainController
 	{
 		console.log(`Property changed from ${oldValue} to ${newValue}`)
 	}
-	
+
 	/**
 	 * With @WatchCollection you can listen to any property as you would with $scope.$watchCollection, but  
 	 * its evaluateed on the controller instead of the scope
@@ -309,7 +317,7 @@ export class MainController
 	{
 		console.log(`Array changed from ${oldValue} to ${newValue}`)
 	}
-	
+
 	/**
 	 * @Debounce will debounce the method for the given amount of millis
 	 */
@@ -387,12 +395,12 @@ import {Bind, Component, View}
 @Component("user")
 @View("<h1>{{ $ctrl.name }}</h1>")
 export class UserComponent
-{ 
+{
 	/**
 	 * If the html is <user name="Dude"></user> then
 	 * this property is "Dude"
 	 */
-	@Bind("@") name;	
+	@Bind("@") name;
 }
 
 ```
