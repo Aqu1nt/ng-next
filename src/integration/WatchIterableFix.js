@@ -78,4 +78,3 @@ function monkeyPatch$watchCollection($target, $parse)
         return this[$watchCollection](monkeyPatchedObserver, action); //Must be this way because of maximum call stack size exceeded error
     }
 }
-

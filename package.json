@@ -1,14 +1,14 @@
 {
   "name": "ng-next",
   "version": "0.1.5",
-  "description": "An easy way to use angular ^1.4 together with ES7 and beyond",
+  "description": "Angular 1 + next generation JS made easy",
   "main": "dist/ng-next.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Aqu1nt/angular-es7-integration.git"
+    "url": "git+https://github.com/Aqu1nt/ng-next.git"
   },
   "keywords": [
     "angular",
@@ -22,9 +22,9 @@
   "author": "Aqu1nt",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Aqu1nt/angular-es7-integration/issues"
+    "url": "https://github.com/Aqu1nt/ng-next/issues"
   },
-  "homepage": "https://github.com/Aqu1nt/angular-es7-integration#readme",
+  "homepage": "https://github.com/Aqu1nt/ng-next#readme",
   "devDependencies": {
     "angular": "^1.5.8",
     "angular-ui-router": "^0.3.1",
