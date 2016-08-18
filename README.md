@@ -1,6 +1,6 @@
 # ng-next
 
-Ng-next is a simple way to use Angular 1.x with ES6 / ES7. It provides an expressive syntax to maintain the simplicity and readability of your code.
+Ng-next is a simple and elegant way to use Angular 1.x with ES6 / ES7. It provides an expressive syntax to maintain the simplicity and readability of your code.
 
 * **Decorators for angular & ui-router**
 * **Async / Await integration to make it compatible with angular's $digest cycle**
@@ -9,7 +9,8 @@ Ng-next is a simple way to use Angular 1.x with ES6 / ES7. It provides an expres
 ## Requirements
 
 * **Angular 1.x**
-* **Angular UI-Router**
+
+> Note: In order to use Angular UI-Router specific decorators, you need to install [Angular UI-Router](https://github.com/angular-ui/ui-router) first.
 
 ## Installation
 
@@ -21,28 +22,42 @@ npm install --save ng-next
 
 ### Angular Module
 Make sure you define your angular module **before**
+
+Then simply import the package like this:
+
  ```javascript
  import "ng-next"
  ```
 Ng-next **relies on `ng-app`** to fetch your angular module.  
-As an alternative you can define it on the `config` object.
+Alternatively you can define it on the `config` object.
 
 ### Babel & Decorators
-If you want to use decorators please install
-[Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
+
+For the full list of ECMAScript 2015 features, please refer to the [Babel Documentation](http://babeljs.io/docs/learn-es2015/).
+
+If you want to use decorators please install [Babel support for decoratos](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
 
 ## Async / Await
-If you're hyped about `async / await`, you can use it now without having to call `$rootScope.$digest()` every
-time you `await` something. It just works!
 
+Making asynchronous http requests was until now a bit of a hassle. Ng-next provides therefore an elegant and convenient way to achieve the same result.
+Ng-next makes use of the ES6 `async / await` functions.
+
+```javascript
+async getUsers() {
+
+  this.user = await this.UserService.index();
+
+}
+```
+
+You don't have to manually call the `$rootScope.$digest()` after every asynchronous http requests you make.
 This is achieved by injecting proxies into the default `Promise` class, which is used by `async / await`.
-The proxies get injected into `Promise` the first time you call `import "ng-next"`
+The proxies get injected into `Promise` the first time you call `import "ng-next"`. Magic!
 
 #### Debounce $digest
-If you have a huge amount of `async / await` or `Promise.then` statements in your code and they get called extremely often this can
-cause slight performance issues depending on the scope of your application.
 
-In this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before $rootScope gets $digested again.
+Be aware of the amount of `async / await` or `Promise.then` statements you use in your project. High usage can cause slight performance issues.
+In this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before `$rootScope` gets $digested again.
 
 ```javascript
 import {config} from "ng-next"
@@ -242,8 +257,8 @@ export class Configuration
 ```  
 
 ### Utility decorators
-Those decorators should only be used on controllers and services,  
-on services ng-next will use the $rootScope as scope for @On, @Watch and so on...
+Those decorators should only be used on controllers and services.
+For services ng-next will use the $rootScope as the scope for @On, @Watch etc.
 
 ```javascript
 import {Inject, Controller, Init, Destroy, On, Watch, WatchCollection, Debounce}
@@ -370,8 +385,8 @@ export class UserComponent{ ... }
 ```
 
 #### `@View`
-Sets the template / templateUrl property of an `@Component` or `@State`, if the string contains a "<" its  
-used as template, otherwise its propbably an URL
+Sets the template / templateUrl property of an `@Component` or `@State`, if the string contains a "<" it will be
+treated as the HTML template, otherwise it will be considered as the path to the HTML template.
 
 ```javascript
 import {View, State, Component}
@@ -387,7 +402,8 @@ export class UserComponent{ ... }
 ```
 
 #### `@Bind`
-Defines a property / attribute which should be bound into a `@Component`
+Defines a property / attribute which should be bound with the related component.
+In this case the `user` component.
 
 ```javascript
 import {Bind, Component, View}
@@ -405,5 +421,10 @@ export class UserComponent
 
 ```
 
+
 # Info
 This little library is pretty new and under active development. Please report bugs and improvements :)
+
+# License
+
+The ng-next library is open-sourced software licensed under the [MIT License](https://opensource.org/licenses/MIT).
