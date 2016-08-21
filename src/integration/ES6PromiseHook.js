@@ -60,7 +60,6 @@ let requestDigestCycle = function()
     }
 };
 
-
 //Create a proxy which will request a digest cycle after executing the
 //Method
 let proxy = function(fn){
@@ -75,19 +74,22 @@ let proxy = function(fn){
 };
 
 //Inject proxies as then callback
-const $$PromiseThenOriginal = Promise.prototype.then;
-Promise.prototype.then = function(success, error) {
-    return $$PromiseThenOriginal.call(this, proxy(success), proxy(error));
+const thenSymbol = Symbol.for("Promise.then");
+Promise.prototype[thenSymbol] = Promise.prototype.then;
+Promise.prototype.then = function(success, error, ... additional) {
+    return this[thenSymbol](proxy(success), proxy(error), ... additional);
 };
 
 //Inject proxies as success callback
-const $$PromiseSuccessOriginal = Promise.prototype.success;
+const successSymbol = Symbol.for("Promise.success");
+Promise.prototype[successSymbol] = Promise.prototype.success;
 Promise.prototype.success = function(result) {
-    return $$PromiseSuccessOriginal.call(this, proxy(result));
+    return this[successSymbol](proxy(result));
 };
 
 //Inject proxies as catch callback
-const $$PromiseCatchOriginal = Promise.prototype.catch;
+const catchSymbol = Symbol.for("Promise.catch");
+Promise.prototype[catchSymbol] = Promise.prototype.catch;
 Promise.prototype.catch = function(error) {
-    return $$PromiseCatchOriginal.call(this, proxy(error));
+    return this[catchSymbol](proxy(error));
 };

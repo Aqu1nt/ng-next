@@ -31,13 +31,14 @@ export function lookupAngularModule()
         return angularModule;
     }
 
-    let ngAppHolder = angular.element(document.querySelector("[ng-app]"));
+    let ngAppHolder = angular.element(document.querySelector("[ng-app], [ng-zone-app]"));
+
 
     if (!ngAppHolder.length) {
-        throw new Error("No element with [ng-app] found and no module set with 'useAngularModule()'");
+        throw new Error("No element with [ng-app] or [ng-zone-app] found and no module set with 'useAngularModule()'");
     }
 
-    let moduleName = ngAppHolder[0].getAttribute('ng-app');
+    let moduleName = ngAppHolder[0].getAttribute('ng-app') || ngAppHolder[0].getAttribute('ng-zone-app');
     angularModule = angular.module(moduleName);
     angularModule.run(["$injector", i => $injector = i ]);
 

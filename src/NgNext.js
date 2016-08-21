@@ -1,45 +1,23 @@
-import "./integration/ES6PromiseHook"
+// import "./integration/ES6PromiseHook" DEPRECATED for the sake of zone.js
 import "./integration/WatchIterableFix"
 
+//Export the angular zone
+export {NgZone} from "./integration/ZoneJSIntegration"
+
 //Export config
-import {config} from "./util/Configuration"
-export {config}
+export {config} from "./util/Configuration"
 
 //Export decorators
-import {Controller} from "./decorators/Controller"
-import {Service} from "./decorators/Service"
-import {Directive} from "./decorators/Directive"
-import {Component, Bind} from "./decorators/Component"
-import {Filter} from "./decorators/Filter"
-import {Config} from "./decorators/Config"
-import {Run} from "./decorators/Run"
-import {View} from "./decorators/View"
-import {Alias} from "./decorators/Alias"
-import {Self} from "./decorators/Self"
-import {State} from "./decorators/State"
-import {Inject} from "./decorators/Inject"
-import {Init, Destroy, Watch, WatchCollection, On, Debounce, Schedule, Abstract} from "./decorators/MethodDecorators"
-
-export {
-    Controller,
-    Service,
-    Directive,
-    Component,
-    Bind,
-    Filter,
-    Config,
-    Run,
-    View,
-    Alias,
-    Self,
-    State,
-    Inject,
-    Init,
-    Destroy,
-    Watch,
-    WatchCollection,
-    On,
-    Debounce,
-    Schedule,
-    Abstract
-}
+export {Controller} from "./decorators/Controller"
+export {Service} from "./decorators/Service"
+export {Directive} from "./decorators/Directive"
+export {Component, Bind} from "./decorators/Component"
+export {Filter} from "./decorators/Filter"
+export {Config} from "./decorators/Config"
+export {Run} from "./decorators/Run"
+export {View} from "./decorators/View"
+export {Alias} from "./decorators/Alias"
+export {Self} from "./decorators/Self"
+export {State} from "./decorators/State"
+export {Inject} from "./decorators/Inject"
+export {Init, Destroy, Watch, WatchCollection, On, Debounce, Schedule, Abstract} from "./decorators/MethodDecorators"

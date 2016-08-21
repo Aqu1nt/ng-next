@@ -1,4 +1,4 @@
-import {angularInjector, lookupAngularModule as module} from "../util/AngularModuleResolver"
+import {angularInjector, module} from "../util/AngularModuleResolver"
 import * as symbols from "../util/Symbols"
 import {callAnnotations} from "../util/AngularUtils"
 
@@ -96,7 +96,7 @@ export function Inject(target, name, descriptor)
 
 
 let currentLocals = undefined;
-module().config(["$provide", function($provide){
+module.then(m => m.config(["$provide", function($provide){
     $provide.decorator("$controller", ["$delegate", function($delegate){
         return function(expression, locals, later, ident){
 
@@ -129,4 +129,4 @@ module().config(["$provide", function($provide){
             }
         };
     }])
-}]);
+}]));

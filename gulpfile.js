@@ -18,7 +18,8 @@ elixir(function(mix){
     });
 
     mix.browserify('./examples/Example.js', './examples/dist/transpiled.js', '.', {
-
+        cache: {}, // required for watchify
+        packageCache: {}, // required for watchify
     });
 
     mix.livereload();

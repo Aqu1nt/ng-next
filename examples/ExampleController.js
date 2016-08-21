@@ -1,4 +1,6 @@
-import {Controller, WatchCollection} from "../src/NgNext"
+import {Controller, WatchCollection, Inject, Init} from "../src/NgNext"
+import "babel-polyfill"
+
 
 /**
  * Controller to demonstrate iterable for ng-repeat / $watchCollection
@@ -6,6 +8,15 @@ import {Controller, WatchCollection} from "../src/NgNext"
 @Controller("ExampleController")
 export class ExampleController
 {
+
+    @Inject $http;
+
+    /**
+     * Title
+     * @type {string}
+     */
+    title = "Ng-next example";
+
     /**
      * Set is not an array and angular wouldn't be able to watch
      * it via $watchCollection, but with ng-next it works! :D
@@ -42,5 +53,30 @@ export class ExampleController
     {
         console.log("List changed to: ", list)
     }
-}
 
+    constructor(NgZone)
+    {
+        NgZone.runOutsideAngular(() => this.render());
+    }
+
+    /**
+     * Test if the requestAnimationFrame is actually running outside
+     */
+    render()
+    {
+        requestAnimationFrame(() => {
+            if (Zone.current === NgZone) {
+                console.error("requestAnimationFrame runs inside AngularZone!!");
+            }
+            this.render();
+        });
+    }
+
+    @Init async asyncHttpCall() {
+        setTimeout(async () => {
+            this.title = "setTimeout";
+            await this.$http.get("http://jsonplaceholder.typicode.com");
+            this.title = "Http request successful";
+        }, 1000);
+    }
+}

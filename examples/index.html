@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="example">
+<html lang="en" ng-zone-app="example">
 <head>
     <meta charset="UTF-8">
     <title>Ng-next example</title>
 </head>
 <body ng-controller="ExampleController as exampleCtrl">
-
+    <h1>{{ exampleCtrl.title }}</h1>
     <button ng-click="exampleCtrl.add()">Add</button>
     <button ng-click="exampleCtrl.remove()">Remove</button>
     <button ng-click="exampleCtrl.change()">Change</button>

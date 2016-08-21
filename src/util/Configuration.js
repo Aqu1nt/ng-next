@@ -8,12 +8,15 @@ const NgNextConfig =  {
     //Angular module
     MODULE : undefined,
 
-    //Angular module
-    MODULE : null,
-
-    //PromiseHook configuration
+    /**
+     * @deprecated since zone.js integration is used for change detection
+     */
     DEBOUNCE_DIGEST_MILLIS : false,
-    ASYNC_AWAIT_ENABLED : true,
+
+    /**
+     * @deprecated since zone.js integration is used for change detection
+     */
+    ASYNC_AWAIT_ENABLED : false,
 
     //Further configuration
     ALLOW_DECORATORS_IN_SERVICES : true,
