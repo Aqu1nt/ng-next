@@ -2773,9 +2773,6 @@ exports.ngZoneModule = exports.NgZone = undefined;
 
 _dereq_("zone.js");
 
-//The Symbol under which the original bootstrap function is still available
-var bootstrapSymbol = Symbol.for("angular.bootstrap");
-
 //The default zone where runOutsideAngular() calls are being executed
 var outerZone = Zone.current;
 
@@ -2784,16 +2781,18 @@ var NgZone = exports.NgZone = outerZone.fork({
     name: "Angular Zone <ng-next>",
     onInvoke: function onInvoke(delegate, current, target, callback, applyThis, args) {
         try {
+            NgZone.$digested = false;
             return delegate.invoke(target, callback, applyThis, args);
         } finally {
-            NgZone.$$digestOnce();
+            $digestOnce();
         }
     },
     onInvokeTask: function onInvokeTask(delegate, current, target, task, applyThis, args) {
         try {
+            NgZone.$digested = false;
             return delegate.invokeTask(target, task, applyThis, args);
         } finally {
-            NgZone.$$digestOnce();
+            $digestOnce();
         }
     }
 });
@@ -2801,8 +2800,8 @@ var NgZone = exports.NgZone = outerZone.fork({
 // Add $digest to the zone
 NgZone.$digest = function () {};
 
-// Digests only if not already done, internal api
-NgZone.$$digestOnce = function () {
+// Digests only if not already done
+var $digestOnce = function $digestOnce() {
     if (!NgZone.$digested) NgZone.$digest();
     NgZone.$digested = false;
 };
@@ -2818,28 +2817,16 @@ ngZoneModule.factory("NgZone", function () {
     return NgZone;
 });
 
-/**
- * Bootstraps the angular application inside it's own angular zone
- * @param node
- * @param modules
- * @param additional
- */
-function bootstrapInNgZone(node, modules) {
-    for (var _len = arguments.length, additional = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        additional[_key - 2] = arguments[_key];
-    }
+//Add auto-bootstrap handler
+angular.element(document).ready(function () {
 
-    //Auto add ngZone as dependency
-    (modules || []).push("ngZone");
-
-    //Export the angular zone onto the window if not existing
-    window.NgZone = window.NgZone || NgZone;
-
-    //Bootstrap angular inside the angular zone
     NgZone.run(function () {
-        var _angular;
 
-        (_angular = angular)[bootstrapSymbol].apply(_angular, [node, modules].concat(additional)).invoke(function ($rootScope) {
+        //Export the angular zone onto the window if not existing
+        window.NgZone = window.NgZone || NgZone;
+
+        //Resume bootstrap inside of our angular zone
+        angular.resumeBootstrap(["ngZone"]).invoke(["$rootScope", function ($rootScope) {
 
             //Patch root scopes digest to set an indicator on the zone
             var digestSymbol = Symbol.for("$digest");
@@ -2857,24 +2844,12 @@ function bootstrapInNgZone(node, modules) {
             NgZone.$digest = function () {
                 $rootScope.$digest();
             };
-        });
+        }]);
     });
-}
-
-//Add auto-bootstrap handler
-angular.element(document).ready(function () {
-    var root = angular.element(document.querySelector("[ng-zone-app]"))[0];
-    if (root) {
-        var moduleName = root.getAttribute('ng-zone-app');
-        bootstrapInNgZone(root, [moduleName]);
-    }
 });
 
-//Monkey patch angular.bootstrap
-angular[bootstrapSymbol] = angular.bootstrap;
-angular.bootstrap = function () {
-    bootstrapInNgZone.apply(undefined, arguments);
-};
+//Force angular to stop the bootstrap process
+window.name = "NG_DEFER_BOOTSTRAP!";
 
 },{"zone.js":2}],19:[function(_dereq_,module,exports){
 "use strict";
@@ -2901,6 +2876,16 @@ var angularModule = null;
  * the first time and angular is beyond its run phase
  */
 var $injector = null;
+var $injectorRequested = false;
+
+var requestInjector = function requestInjector() {
+    if (angularModule && !$injectorRequested) {
+        angularModule.run(["$injector", function (i) {
+            return $injector = i;
+        }]);
+        $injectorRequested = true;
+    }
+};
 
 /**
  * Attempts to lookup the root angular module of the app by resolving the first
@@ -2909,29 +2894,30 @@ var $injector = null;
  * then be returned by this function
  */
 function lookupAngularModule() {
-    //Get manually specified module from config
-    if (_Configuration.config.MODULE && !angularModule) {
-        angularModule = _Configuration.config.MODULE;
-    }
+    try {
+        //Get manually specified module from config
+        if (_Configuration.config.MODULE && !angularModule) {
+            angularModule = _Configuration.config.MODULE;
+        }
 
-    //Returns the preset module if available
-    if (angularModule) {
+        //Returns the preset module if available
+        if (angularModule) {
+            return angularModule;
+        }
+
+        var ngAppHolder = angular.element(document.querySelector("[ng-app]"));
+
+        if (!ngAppHolder.length) {
+            throw new Error("No element with [ng-app] found and no module set with 'useAngularModule()'");
+        }
+
+        var moduleName = ngAppHolder[0].getAttribute('ng-app');
+        angularModule = angular.module(moduleName);
+
         return angularModule;
+    } finally {
+        requestInjector();
     }
-
-    var ngAppHolder = angular.element(document.querySelector("[ng-app], [ng-zone-app]"));
-
-    if (!ngAppHolder.length) {
-        throw new Error("No element with [ng-app] or [ng-zone-app] found and no module set with 'useAngularModule()'");
-    }
-
-    var moduleName = ngAppHolder[0].getAttribute('ng-app') || ngAppHolder[0].getAttribute('ng-zone-app');
-    angularModule = angular.module(moduleName);
-    angularModule.run(["$injector", function (i) {
-        return $injector = i;
-    }]);
-
-    return angularModule;
 }
 
 /**
@@ -2940,6 +2926,7 @@ function lookupAngularModule() {
  */
 function useAngularModule(module) {
     angularModule = module;
+    requestInjector();
 }
 
 /**
