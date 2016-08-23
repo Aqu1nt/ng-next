@@ -12,6 +12,15 @@ let angularModule = null;
  * the first time and angular is beyond its run phase
  */
 let $injector = null;
+let $injectorRequested = false;
+
+let requestInjector = function(){
+    if (angularModule && !$injectorRequested)
+    {
+        angularModule.run(["$injector", i => $injector = i]);
+        $injectorRequested = true;
+    }
+};
 
 /**
  * Attempts to lookup the root angular module of the app by resolving the first
@@ -21,28 +30,31 @@ let $injector = null;
  */
 export function lookupAngularModule()
 {
-    //Get manually specified module from config
-    if (config.MODULE && !angularModule) {
-        angularModule = config.MODULE;
-    }
+    try {
+        //Get manually specified module from config
+        if (config.MODULE && !angularModule) {
+            angularModule = config.MODULE;
+        }
 
-    //Returns the preset module if available
-    if (angularModule) {
+        //Returns the preset module if available
+        if (angularModule) {
+            return angularModule;
+        }
+
+        let ngAppHolder = angular.element(document.querySelector("[ng-app]"));
+
+
+        if (!ngAppHolder.length) {
+            throw new Error("No element with [ng-app] found and no module set with 'useAngularModule()'");
+        }
+
+        let moduleName = ngAppHolder[0].getAttribute('ng-app');
+        angularModule = angular.module(moduleName);
+
         return angularModule;
+    } finally {
+        requestInjector();
     }
-
-    let ngAppHolder = angular.element(document.querySelector("[ng-app], [ng-zone-app]"));
-
-
-    if (!ngAppHolder.length) {
-        throw new Error("No element with [ng-app] or [ng-zone-app] found and no module set with 'useAngularModule()'");
-    }
-
-    let moduleName = ngAppHolder[0].getAttribute('ng-app') || ngAppHolder[0].getAttribute('ng-zone-app');
-    angularModule = angular.module(moduleName);
-    angularModule.run(["$injector", i => $injector = i ]);
-
-    return angularModule;
 }
 
 
@@ -53,6 +65,7 @@ export function lookupAngularModule()
 export function useAngularModule(module)
 {
     angularModule = module;
+    requestInjector();
 }
 
 /**

@@ -1,5 +1,4 @@
 import {Controller, WatchCollection, Inject, Init} from "../src/NgNext"
-import "babel-polyfill"
 
 
 /**

@@ -1,6 +1,6 @@
-import "angular"
+import {config} from "../src/util/Configuration"
 
 /**
  * We have to define the module in its own file because import statements are always executed first
  */
-angular.module("example", []);
+config.MODULE = angular.module("example", []);

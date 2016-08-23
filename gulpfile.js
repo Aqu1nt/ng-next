@@ -8,14 +8,14 @@ elixir(function(mix){
     config.options.plugins = ["babel-plugin-transform-decorators-legacy"];
     config.options.presets = ["es2015", "stage-2"];
 
-    mix.browserify('./src/NgNext.js', './dist/ng-next.js', '.', {
-        standalone : "NgNext",
-        bare : true,
-        debug : true,
-        plugin: [
-            [ "browserify-derequire" ]
-        ]
-    });
+    // mix.browserify('./src/NgNext.js', './dist/ng-next.js', '.', {
+    //     standalone : "NgNext",
+    //     bare : true,
+    //     debug : true,
+    //     plugin: [
+    //         [ "browserify-derequire" ]
+    //     ]
+    // });
 
     mix.browserify('./examples/Example.js', './examples/dist/transpiled.js', '.', {
         cache: {}, // required for watchify
