@@ -53,7 +53,7 @@ export class ExampleController
         console.log("List changed to: ", list)
     }
 
-    constructor(NgZone)
+    constructor(NgZone, $compile)
     {
         NgZone.runOutsideAngular(() => this.render());
     }

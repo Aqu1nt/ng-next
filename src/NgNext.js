@@ -1,5 +1,6 @@
 // import "./integration/ES6PromiseHook" DEPRECATED for the sake of zone.js
 import "./integration/WatchIterableFix"
+import "./integration/NG2EventBinding"
 
 //Export the angular zone
 export {NgZone} from "./integration/ZoneJSIntegration"

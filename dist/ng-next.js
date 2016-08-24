@@ -1704,7 +1704,9 @@ Object.defineProperty(exports, "Abstract", {
 
 _dereq_("./integration/WatchIterableFix");
 
-},{"./decorators/Alias":4,"./decorators/Component":5,"./decorators/Config":6,"./decorators/Controller":7,"./decorators/Directive":8,"./decorators/Filter":9,"./decorators/Inject":10,"./decorators/MethodDecorators":11,"./decorators/Run":12,"./decorators/Self":13,"./decorators/Service":14,"./decorators/State":15,"./decorators/View":16,"./integration/WatchIterableFix":17,"./integration/ZoneJSIntegration":18,"./util/Configuration":21}],4:[function(_dereq_,module,exports){
+_dereq_("./integration/NG2EventBinding");
+
+},{"./decorators/Alias":4,"./decorators/Component":5,"./decorators/Config":6,"./decorators/Controller":7,"./decorators/Directive":8,"./decorators/Filter":9,"./decorators/Inject":10,"./decorators/MethodDecorators":11,"./decorators/Run":12,"./decorators/Self":13,"./decorators/Service":14,"./decorators/State":15,"./decorators/View":16,"./integration/NG2EventBinding":17,"./integration/WatchIterableFix":18,"./integration/ZoneJSIntegration":19,"./util/Configuration":22}],4:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1726,7 +1728,7 @@ function Alias(alias) {
     };
 }
 
-},{"../util/Symbols":23}],5:[function(_dereq_,module,exports){
+},{"../util/Symbols":24}],5:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1825,7 +1827,7 @@ function Bind(bindType, attributeName) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/Symbols":23,"./View":16}],6:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/Symbols":24,"./View":16}],6:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1847,7 +1849,7 @@ function Config(target, name) {
   if (target instanceof Function) (0, _AngularModuleResolver.lookupAngularModule)().config(target);else (0, _AngularModuleResolver.lookupAngularModule)().config(target[name]);
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],7:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21}],7:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1883,7 +1885,7 @@ function Controller(clazz) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],8:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21}],8:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1931,7 +1933,7 @@ function Directive(clazz, name) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20,"../util/ES6Directive":22}],9:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21,"../util/ES6Directive":23}],9:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1968,7 +1970,7 @@ function Filter(clazz, method) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],10:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21}],10:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2121,7 +2123,7 @@ _AngularModuleResolver.module.then(function (m) {
     }]);
 });
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20,"../util/Symbols":23}],11:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21,"../util/Symbols":24}],11:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2314,7 +2316,7 @@ function Abstract(target, name, desc) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/Symbols":23}],12:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/Symbols":24}],12:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2336,7 +2338,7 @@ function Run(target, name) {
   if (target instanceof Function) (0, _AngularModuleResolver.lookupAngularModule)().run(target);else (0, _AngularModuleResolver.lookupAngularModule)().run(target[name]);
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],13:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21}],13:[function(_dereq_,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2464,7 +2466,7 @@ function Service(clazz) {
     };
 }
 
-},{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],15:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/AngularUtils":21}],15:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2614,7 +2616,7 @@ _AngularModuleResolver.module.then(function (m) {
     }]);
 });
 
-},{"../util/AngularModuleResolver":19,"../util/Configuration":21,"../util/Symbols":23,"./Controller":7,"./View":16}],16:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20,"../util/Configuration":22,"../util/Symbols":24,"./Controller":7,"./View":16}],16:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2660,7 +2662,14 @@ function decorateView(clazz, conf) {
     }
 }
 
-},{"../util/Symbols":23}],17:[function(_dereq_,module,exports){
+},{"../util/Symbols":24}],17:[function(_dereq_,module,exports){
+"use strict";
+
+var _AngularModuleResolver = _dereq_("../util/AngularModuleResolver");
+
+_AngularModuleResolver.module.then(function (module) {}); //Not implemented yet
+
+},{"../util/AngularModuleResolver":20}],18:[function(_dereq_,module,exports){
 "use strict";
 
 var _AngularModuleResolver = _dereq_("../util/AngularModuleResolver");
@@ -2763,7 +2772,7 @@ function monkeyPatch$watchCollection($target, $parse) {
     };
 }
 
-},{"../util/AngularModuleResolver":19}],18:[function(_dereq_,module,exports){
+},{"../util/AngularModuleResolver":20}],19:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2851,7 +2860,7 @@ angular.element(document).ready(function () {
 //Force angular to stop the bootstrap process
 window.name = "NG_DEFER_BOOTSTRAP!";
 
-},{"zone.js":2}],19:[function(_dereq_,module,exports){
+},{"zone.js":2}],20:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2998,7 +3007,7 @@ var modulePromise = new Promise(function (resolve) {
 
 exports.module = modulePromise;
 
-},{"./Configuration":21}],20:[function(_dereq_,module,exports){
+},{"./Configuration":22}],21:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3266,7 +3275,7 @@ function callAnnotations(controller, $scope) {
     });
 }
 
-},{"../util/Symbols":23,"./AngularModuleResolver":19,"./Configuration":21}],21:[function(_dereq_,module,exports){
+},{"../util/Symbols":24,"./AngularModuleResolver":20,"./Configuration":22}],22:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3303,7 +3312,7 @@ var NgNextConfig = {
 
 exports.config = NgNextConfig;
 
-},{}],22:[function(_dereq_,module,exports){
+},{}],23:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3387,7 +3396,7 @@ exports.default = function (directive) {
    * @param directive
    */
 
-},{}],23:[function(_dereq_,module,exports){
+},{}],24:[function(_dereq_,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
