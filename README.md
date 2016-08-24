@@ -3,7 +3,7 @@
 Ng-next is a simple and elegant way to use Angular 1.x with ES6 / ES7. It provides an expressive syntax to maintain the simplicity and readability of your code.
 
 * **Decorators for angular & ui-router**
-* **Async / Await integration to make it compatible with angular's $digest cycle**
+* **Async / Await (zone.js) integration to make it compatible with angular's $digest cycle**
 * **Monkey patch for `$scope.$watchCollection` to work with ES6 iterables (Set / Map / Symbol.iterator)**
 
 ## Requirements
@@ -43,27 +43,54 @@ Making asynchronous http requests was until now a bit of a hassle. Ng-next provi
 Ng-next makes use of the ES6 `async / await` functions.
 
 ```javascript
-async getUsers() {
+//Http call
+async function doGet(url)
+{
+	let response = await $http.get(url);
+	return response.data;
+}
 
-  this.user = await this.UserService.index();
-
+//API call
+async getUsers() 
+{
+  this.users = await this.UserService.get();
 }
 ```
 
 You don't have to manually call the `$rootScope.$digest()` after every asynchronous http requests you make.
-This is achieved by injecting proxies into the default `Promise` class, which is used by `async / await`.
-The proxies get injected into `Promise` the first time you call `import "ng-next"`. Magic!
+This is achieved by bootstrapping your angular application inside its own "angular zone", which will trigger `$rootScope.$digest()`, if not already done, every time your code leaves the zone.
 
-#### Debounce $digest
+> Note: With this technique you're also no longer relying on `$timeout`, `$interval` and so on...  
+> Use native `setTimeout`, `setInterval`, `addEventListener`... and your app will still always be up to date. Magic!
 
-Be aware of the amount of `async / await` or `Promise.then` statements you use in your project. High usage can cause slight performance issues.
-In this case you can limit all `$rootScope.$digest()` calls by setting a minimum duration that has to pass before `$rootScope` gets $digested again.
+> Note: `NgZone` is available via the window object or as injectable service
 
+#### NgZone.runOutsideAngular
+
+Sometimes you want to execute something outside of angular, without executing `$digest` after the task has completed, this is often the case for frequent tasks like `requestAnimationFrame` that would totally destroy your CPU.  
+
+To achieve this, you may call your function outside of Angular
 ```javascript
-import {config} from "ng-next"
-config.DEBOUNCE_DIGEST_MILLIS = [millis] //Debounce for [millis]
-config.DEBOUNCE_DIGEST_MILLIS = false   //Disable debounce
+import {Inject, Service, Init} from "ng-next"
+
+@Service
+class RenderService
+{
+	
+	@Inject NgZone;
+	
+	@Init render()
+	{
+		//Care, will trigger $digest every frame
+		//requestAnimationFrame(() => this.render());
+		
+		//Will run without triggering anything
+		this.NgZone.runOutsideAngular(() => requestAnimationFrame(() => this.render()));
+	}
+}
 ```
+
+> For further information see [zone.js Documentation](https://github.com/angular/zone.js/)
 
 ## $scope.$watchCollection
 Ng-next monkey patches `$scope.$watchCollection` of every scope to make it compatible with any iterable object.  
