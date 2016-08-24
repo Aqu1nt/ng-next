@@ -1,6 +1,6 @@
 {
   "name": "ng-next",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Angular 1 + next generation JS made easy",
   "main": "dist/ng-next.js",
   "scripts": {
