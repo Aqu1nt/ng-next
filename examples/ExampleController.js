@@ -53,10 +53,11 @@ export class ExampleController
         console.log("List changed to: ", list)
     }
 
-    constructor(NgZone, $compile)
+    constructor(NgZone)
     {
         NgZone.runOutsideAngular(() => this.render());
     }
+
 
     /**
      * Test if the requestAnimationFrame is actually running outside

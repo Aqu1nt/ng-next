@@ -5,18 +5,12 @@
  * The module configuration, as an anonymous object
  */
 const NgNextConfig =  {
+
     //Angular module
     MODULE : undefined,
 
-    /**
-     * @deprecated since zone.js integration is used for change detection
-     */
-    DEBOUNCE_DIGEST_MILLIS : false,
-
-    /**
-     * @deprecated since zone.js integration is used for change detection
-     */
-    ASYNC_AWAIT_ENABLED : false,
+    //Zone.js
+    ZONE_JS : true,
 
     //Further configuration
     ALLOW_DECORATORS_IN_SERVICES : true,

@@ -85,6 +85,7 @@ const modulePromise = new Promise(function (resolve) {
     try  //If we're lucky the module does already exist
     {
         let module = lookupAngularModule();
+        requestInjector();
         resolve(module);
     }
     catch (e) //Otherwise we must attempt to await its creation
@@ -112,6 +113,8 @@ const modulePromise = new Promise(function (resolve) {
                 //Our main module is available
                 if (name == appModuleName && dependencies) {
                     angular.module = origModuleFunction;
+                    angularModule = module;
+                    requestInjector();
                     resolve(module);
                 }
 
@@ -124,6 +127,8 @@ const modulePromise = new Promise(function (resolve) {
             Object.defineProperty(config, "MODULE", {
                 set : module => {
                     if (!config[moduleSymbol]) {
+                        angularModule = module;
+                        requestInjector();
                         resolve(module);
                     }
                     config[moduleSymbol] = module

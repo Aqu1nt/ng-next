@@ -1,4 +1,5 @@
 import "zone.js"
+import {config} from "../util/Configuration"
 
 //The default zone where runOutsideAngular() calls are being executed
 const outerZone = Zone.current;
@@ -45,31 +46,38 @@ ngZoneModule.factory("NgZone", () => NgZone);
 //Add auto-bootstrap handler
 angular.element(document).ready(() => {
 
-    NgZone.run(() => {
+    if (!config.ZONE_JS)
+    {
+        angular.resumeBootstrap();
+    }
+    else
+    {
+        NgZone.run(() => {
 
-        //Export the angular zone onto the window if not existing
-        window.NgZone = window.NgZone || NgZone;
+            //Export the angular zone onto the window if not existing
+            window.NgZone = window.NgZone || NgZone;
 
-        //Resume bootstrap inside of our angular zone
-       angular.resumeBootstrap(["ngZone"]).invoke(["$rootScope", ($rootScope) => {
+            //Resume bootstrap inside of our angular zone
+            angular.resumeBootstrap(["ngZone"]).invoke(["$rootScope", ($rootScope) => {
 
-           //Patch root scopes digest to set an indicator on the zone
-           const digestSymbol = Symbol.for("$digest");
-           $rootScope[digestSymbol] = $rootScope.$digest;
+                //Patch root scopes digest to set an indicator on the zone
+                const digestSymbol = Symbol.for("$digest");
+                $rootScope[digestSymbol] = $rootScope.$digest;
 
-           //If you want to digest on zone leave give "false" as parameter to $rootScope.$digest
-           $rootScope.$digest = function (disableZoneJS = true) {
-               if (disableZoneJS) NgZone.$digested = true;
-               this[digestSymbol]();
-           };
+                //If you want to digest on zone leave give "false" as parameter to $rootScope.$digest
+                $rootScope.$digest = function (disableZoneJS = true) {
+                    if (disableZoneJS) NgZone.$digested = true;
+                    this[digestSymbol]();
+                };
 
-           //Add digest to the angular zone
-           NgZone.$digest = function(){
-               $rootScope.$digest();
-           }
+                //Add digest to the angular zone
+                NgZone.$digest = function () {
+                    $rootScope.$digest();
+                }
 
-       }]);
-    });
+            }]);
+        });
+    }
 });
 
 //Force angular to stop the bootstrap process
