@@ -2849,7 +2849,9 @@ angular.element(document).ready(function () {
 
                 //Add digest to the angular zone
                 NgZone.$digest = function () {
-                    $rootScope.$digest();
+                    if (!$rootScope.$$phase) {
+                        $rootScope.$digest();
+                    }
                 };
             }]);
         });

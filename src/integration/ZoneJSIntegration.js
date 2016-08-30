@@ -72,7 +72,9 @@ angular.element(document).ready(() => {
 
                 //Add digest to the angular zone
                 NgZone.$digest = function () {
-                    $rootScope.$digest();
+                    if (!$rootScope.$$phase){
+                        $rootScope.$digest();
+                    }
                 }
 
             }]);
