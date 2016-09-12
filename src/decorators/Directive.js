@@ -1,4 +1,4 @@
-import {lookupAngularModule as module} from "../util/AngularModuleResolver"
+import {module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
 import es6enabler from "../util/ES6Directive"
 
@@ -17,7 +17,7 @@ import es6enabler from "../util/ES6Directive"
 export function Directive(clazz, name) {
     clazz = fetch(clazz);
 
-    let registerDirective = (name, fn) => module().directive(name, es6enabler(fn));
+    let registerDirective = (name, fn) => module.then(m => m.directive(name, es6enabler(fn)));
 
     if (clazz.constructor != String) //Directive is called without name => @Directive
     {

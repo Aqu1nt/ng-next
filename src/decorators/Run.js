@@ -1,4 +1,4 @@
-import {lookupAngularModule as module} from "../util/AngularModuleResolver"
+import {module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
 
 /**
@@ -8,6 +8,6 @@ import {fetch} from "../util/AngularUtils"
  */
 export function Run(target, name) {
     target = fetch(target);
-    if (target instanceof Function) module().run(target);
-    else module().run(target[name]);
+    if (target instanceof Function) module.then(m => m.run(target));
+    else module.then(m => m.run(target[name]));
 }

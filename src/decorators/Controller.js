@@ -1,4 +1,4 @@
-import {lookupAngularModule as module} from "../util/AngularModuleResolver"
+import {module} from "../util/AngularModuleResolver"
 import {fetch} from "../util/AngularUtils"
 
 /**
@@ -14,7 +14,7 @@ export function Controller(clazz) {
     clazz = fetch(clazz);
 
     //Function to add the controller
-    let addController = (name, clazz) => module().controller(name, clazz);
+    let addController = (name, clazz) => module.then(m => m.controller(name, clazz));
 
     if (clazz instanceof Function) {
         addController(clazz.name, clazz);

@@ -80,6 +80,10 @@ export function angularInjector()
     return $injector;
 }
 
+function moduleError(e)
+{
+    console.log(e);
+}
 
 const modulePromise = new Promise(function (resolve) {
     try  //If we're lucky the module does already exist
@@ -139,5 +143,6 @@ const modulePromise = new Promise(function (resolve) {
 
     }
 });
+
 
 export {modulePromise as module}

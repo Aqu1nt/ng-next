@@ -13,7 +13,7 @@ export const NgZone = outerZone.fork({
             return delegate.invoke(target, callback, applyThis, args);
         } finally {
             $digestOnce();
-        }
+        }4
     },
     onInvokeTask : function(delegate, current, target, task, applyThis, args) {
         try {
