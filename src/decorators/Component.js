@@ -1,4 +1,4 @@
-import {lookupAngularModule as module} from "../util/AngularModuleResolver"
+import {module} from "../util/AngularModuleResolver"
 import {decorateView} from "./View"
 import * as symbols from "../util/Symbols"
 
@@ -22,38 +22,46 @@ import * as symbols from "../util/Symbols"
  * The @Component decorator can be used together with @View and @Alias and @Bind!
  *
  * @decorator
+ * @param name
  * @param conf
  * @exports
  */
-export function Component(conf = {})
+export function Component(name, conf = {})
 {
-    if (conf.constructor == String) {
-        conf = { selector : conf };
+    if (name.constructor != String)
+    {
+        name = name.selector || name.name;
     }
+
     conf.controllerAs = conf.as || conf.controllerAs;
     conf.restrict = conf.restrict || "E";
-    if (conf.bind == false) conf.bind = false;
-    else conf.bind = conf.bind || {};
 
+    if (conf.bindings == false) conf.bindings = false;
+    else conf.bindings = conf.bindings || conf.bind || {};
+
+    if (conf.bindings == false) {
+        throw new Error(`Components must have an isolated binding! in ${name}`);
+    }
 
     conf.template = conf.view || conf.template;
-    conf.selector = conf.name || conf.selector;
 
     return target => {
         conf.controller = target;
-        module().directive(conf.selector, () => {
 
-            //Merge @Bind properties
-            if (conf.bind !== false) {
-                conf.bind = Object.assign(conf.bind || {}, target[symbols.bind] || {});
-            }
+        module.then(m => {
 
-            conf.controllerAs = target[symbols.alias] || conf.controllerAs || "$ctrl";
-            conf.bindToController = conf.bind;
+            m.directive(name, () => {
 
-            decorateView(target, conf);
+                //Merge @Bind properties
+                conf.bindings = Object.assign(conf.bindings || {}, target[symbols.bind] || {});
 
-            return conf;
+                conf.controllerAs = target[symbols.alias] || conf.controllerAs || "$ctrl";
+                conf.bindToController = conf.bindings;
+
+                decorateView(target, conf);
+
+                return conf;
+            })
         });
     }
 }

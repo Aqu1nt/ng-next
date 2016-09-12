@@ -1767,37 +1767,45 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
  * The @Component decorator can be used together with @View and @Alias and @Bind!
  *
  * @decorator
+ * @param name
  * @param conf
  * @exports
  */
-function Component() {
-    var conf = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+function Component(name) {
+    var conf = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-    if (conf.constructor == String) {
-        conf = { selector: conf };
+    if (name.constructor != String) {
+        name = name.selector || name.name;
     }
+
     conf.controllerAs = conf.as || conf.controllerAs;
     conf.restrict = conf.restrict || "E";
-    if (conf.bind == false) conf.bind = false;else conf.bind = conf.bind || {};
+
+    if (conf.bindings == false) conf.bindings = false;else conf.bindings = conf.bindings || conf.bind || {};
+
+    if (conf.bindings == false) {
+        throw new Error("Components must have an isolated binding! in " + name);
+    }
 
     conf.template = conf.view || conf.template;
-    conf.selector = conf.name || conf.selector;
 
     return function (target) {
         conf.controller = target;
-        (0, _AngularModuleResolver.lookupAngularModule)().directive(conf.selector, function () {
 
-            //Merge @Bind properties
-            if (conf.bind !== false) {
-                conf.bind = Object.assign(conf.bind || {}, target[symbols.bind] || {});
-            }
+        _AngularModuleResolver.module.then(function (m) {
 
-            conf.controllerAs = target[symbols.alias] || conf.controllerAs || "$ctrl";
-            conf.bindToController = conf.bind;
+            m.directive(name, function () {
 
-            (0, _View.decorateView)(target, conf);
+                //Merge @Bind properties
+                conf.bindings = Object.assign(conf.bindings || {}, target[symbols.bind] || {});
 
-            return conf;
+                conf.controllerAs = target[symbols.alias] || conf.controllerAs || "$ctrl";
+                conf.bindToController = conf.bindings;
+
+                (0, _View.decorateView)(target, conf);
+
+                return conf;
+            });
         });
     };
 }
@@ -1846,7 +1854,11 @@ var _AngularUtils = _dereq_("../util/AngularUtils");
  */
 function Config(target, name) {
   target = (0, _AngularUtils.fetch)(target);
-  if (target instanceof Function) (0, _AngularModuleResolver.lookupAngularModule)().config(target);else (0, _AngularModuleResolver.lookupAngularModule)().config(target[name]);
+  if (target instanceof Function) _AngularModuleResolver.module.then(function (m) {
+    return m.config(target);
+  });else _AngularModuleResolver.module.then(function (m) {
+    return m.config(target[name]);
+  });
 }
 
 },{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],7:[function(_dereq_,module,exports){
@@ -1875,7 +1887,9 @@ function Controller(clazz) {
 
     //Function to add the controller
     var addController = function addController(name, clazz) {
-        return (0, _AngularModuleResolver.lookupAngularModule)().controller(name, clazz);
+        return _AngularModuleResolver.module.then(function (m) {
+            return m.controller(name, clazz);
+        });
     };
 
     if (clazz instanceof Function) {
@@ -1919,7 +1933,9 @@ function Directive(clazz, name) {
     clazz = (0, _AngularUtils.fetch)(clazz);
 
     var registerDirective = function registerDirective(name, fn) {
-        return (0, _AngularModuleResolver.lookupAngularModule)().directive(name, (0, _ES6Directive2.default)(fn));
+        return _AngularModuleResolver.module.then(function (m) {
+            return m.directive(name, (0, _ES6Directive2.default)(fn));
+        });
     };
 
     if (clazz.constructor != String) //Directive is called without name => @Directive
@@ -1958,7 +1974,9 @@ function Filter(clazz, method) {
 
     //Function to add the controller
     var registerFilter = function registerFilter(name, fn) {
-        return (0, _AngularModuleResolver.lookupAngularModule)().filter(name, fn);
+        return _AngularModuleResolver.module.then(function (m) {
+            return m.filter(name, fn);
+        });
     };
 
     if (clazz.constructor != String) {
@@ -2335,7 +2353,11 @@ var _AngularUtils = _dereq_("../util/AngularUtils");
  */
 function Run(target, name) {
   target = (0, _AngularUtils.fetch)(target);
-  if (target instanceof Function) (0, _AngularModuleResolver.lookupAngularModule)().run(target);else (0, _AngularModuleResolver.lookupAngularModule)().run(target[name]);
+  if (target instanceof Function) _AngularModuleResolver.module.then(function (m) {
+    return m.run(target);
+  });else _AngularModuleResolver.module.then(function (m) {
+    return m.run(target[name]);
+  });
 }
 
 },{"../util/AngularModuleResolver":19,"../util/AngularUtils":20}],13:[function(_dereq_,module,exports){
@@ -2456,7 +2478,9 @@ function Service(clazz) {
 
     //Function to add the controller
     var addService = function addService(name, clazz) {
-        return (0, _AngularModuleResolver.lookupAngularModule)().service(name, clazz);
+        return _AngularModuleResolver.module.then(function (m) {
+            return m.service(name, clazz);
+        });
     };
 
     if (clazz instanceof Function) {
@@ -2789,7 +2813,7 @@ var NgZone = exports.NgZone = outerZone.fork({
             return delegate.invoke(target, callback, applyThis, args);
         } finally {
             $digestOnce();
-        }
+        }4;
     },
     onInvokeTask: function onInvokeTask(delegate, current, target, task, applyThis, args) {
         try {
@@ -2948,6 +2972,10 @@ function useAngularModule(module) {
  */
 function angularInjector() {
     return $injector;
+}
+
+function moduleError(e) {
+    console.log(e);
 }
 
 var modulePromise = new Promise(function (resolve) {
