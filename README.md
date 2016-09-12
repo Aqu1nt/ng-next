@@ -20,16 +20,23 @@ Ng-next is available on [npm](https://www.npmjs.com/package/ng-next)
 npm install --save ng-next
 ```
 
-### Angular Module
-Make sure you define your angular module **before**
-
-Then simply import the package like this:
+### Configuration
+Ng-next will initialize itself the first time you call 
 
  ```javascript
  import "ng-next"
  ```
-Ng-next **relies on `ng-app`** to fetch your angular module.  
-Alternatively you can define it on the `config` object.
+You may perform some configuration through the following object, altough there isn't much to configure because ng-next aims to provide the simplest solution you can get!
+
+```javascript
+import {config} from "ng-next"
+
+// If ng-next fails to auto-detect your module
+config.MODULE = angular.module("my-app");
+
+// Enable or disable zone.js for $digest support
+config.ZONE_JS = true / false;
+```
 
 ### Babel & Decorators
 
@@ -199,10 +206,9 @@ export class BarComponent
  * The object given into the decorator is used as directive configuration
  * You may use every property a directive can have
  */
-@Component({
-	name : "foo",
+@Component("foo", {
 	template : "<h1>{{ fooCtrl.bar }}</h1>"
-	bind : {
+	bindings : {
 		bar : "="
 	},
 	as : "fooCtrl"
