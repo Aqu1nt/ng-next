@@ -37,7 +37,9 @@
     "laravel-elixir-livereload": "^1.1.6"
   },
   "dependencies": {
-    "babel-polyfill": "^6.13.0",
+    "babel-polyfill": "^6.13.0"
+  },
+  "peerDependencies": {
     "zone.js": "^0.7.0"
   }
 }
