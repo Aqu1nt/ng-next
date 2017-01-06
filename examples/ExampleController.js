@@ -23,6 +23,8 @@ export class ExampleController
      */
     list = new Set(["0", "1", "2", "3"]);
 
+    options = ["opt1", "opt2", "opt3"];
+
     /**
      * Adds an item to our set
      */

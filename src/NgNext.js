@@ -3,6 +3,7 @@ import "./util/AngularModuleResolver" //Initialize the resolver at least once
 import "./integration/WatchIterableFix"
 // import "./integration/NG2EventBinding" still experimental
 
+
 //Export the angular zone
 export {NgZone} from "./integration/ZoneJSIntegration"
 

@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.13.0",
-    "zone.js": "^0.6.15"
+    "zone.js": "^0.7.0"
   }
 }

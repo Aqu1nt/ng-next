@@ -1,4 +1,3 @@
-import "zone.js"
 import {config} from "../util/Configuration"
 
 //The default zone where runOutsideAngular() calls are being executed
@@ -13,7 +12,7 @@ export const NgZone = outerZone.fork({
             return delegate.invoke(target, callback, applyThis, args);
         } finally {
             $digestOnce();
-        }4
+        }
     },
     onInvokeTask : function(delegate, current, target, task, applyThis, args) {
         try {

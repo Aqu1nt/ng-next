@@ -1,3 +1,4 @@
+import "zone.js"
 import "angular"
 import "babel-polyfill";
 import "./ExampleController"
