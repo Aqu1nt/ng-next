@@ -1,3 +1,4 @@
+import "zone.js"
 import {config} from "../util/Configuration"
 
 //The default zone where runOutsideAngular() calls are being executed

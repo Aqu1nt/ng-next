@@ -1,7 +1,6 @@
-// import "./integration/ES6PromiseHook" DEPRECATED for the sake of zone.js
+import 'babel-polyfill'
 import "./util/AngularModuleResolver" //Initialize the resolver at least once
 import "./integration/WatchIterableFix"
-// import "./integration/NG2EventBinding" still experimental
 
 
 //Export the angular zone

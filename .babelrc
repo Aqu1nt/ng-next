@@ -1,0 +1,9 @@
+{
+  "presets": [
+    [ "babel-preset-latest" ],
+    [ "babel-preset-stage-2" ]
+  ],
+  "plugins": [
+    [ "babel-plugin-transform-decorators-legacy" ]
+  ]
+}
